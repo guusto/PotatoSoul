@@ -1,13 +1,13 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-PROJECT: SCREAMING POTATO
+PROJECT: POTATO SOUL
 OWNERS: Nikita Khutorni, Harald Asmus
 DESCRIPTION: 
-This is the Arduino code for the Instructables' "Potato Speed Contest" for the project "Screaming Potato" by Nikita Khutorni and Harald Asmus.
-For using this code you will also need the newer library of the Talkie-libraries on the Github Page of adafruit (https://github.com/adafruit/Talkie).
+This is the Arduino code for the Instructables "Potato Speed Contest" for the project "Potato Soul" by Nikita Khutorni and Harald Asmus.
+For using this code you will also need the newer library of the Talkie-libraries on the Github page of adafruit (https://github.com/adafruit/Talkie).
 The idea is that inside a (sweet) potato is a 3d printed box with electronics. On the outside, connected to the Arduino Nano on the inside of the box through two holes,
-there are tow PIR sensors acting as eyes of the potato and watching out for infrared motion. Once one of the PIR sensors picks up a signal, the Potato will warn the person 
+there are two PIR sensors acting as eyes of the potato and watching out for infrared motion. Once one of the PIR sensors picks up a signal, the Potato will warn the person 
 with words the Inductive Proximity Sensor (ProxSensor) is activated. The ProxSensor is placed upwards, diagonally, along the longer side of the potato and box, because 
-they usually take up a lot of place and veryconveniently right above where the head of the ProxSensor is, on the outside of the potato there is written an X and "Don't cut 
+they usually take up a lot of place and very conveniently right above where the head of the ProxSensor is, on the outside of the potato there is written an X and "Don't cut 
 me here.", which should push the one cutting the potato pyschologically to cut the potato right there, therefore the ProxSensor with its short magnetic field distance will 
 sense the incoming metal/knife and the potato will suddenly scream.
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -49,8 +49,8 @@ void setup() {
   pinMode(pir2Sig, INPUT);
   
   pinMode(proxPow, OUTPUT);
-  //we start the ProxSensor on LOW and only activate it when it might be needed, because it usually takes in a voltage between 6V and 36V, which mean if we constantly run it on HIGH, it will drink our battery like a cup of CocaCola at McDonalds
-  //the PIR sensors will activate the ProxSensor, because there ain't no knife without a hand, except you have ghosts at home or build a robot solely to cut this potoato, at which point I might question your sanity at either possibility
+  //we start the ProxSensor on LOW and only activate it when it might be needed, because it usually takes in a voltage between 6V and 36V, which mean if we constantly run it on HIGH, it will drink our battery like a cup of CocaCola at McDonalds.
+  //the PIR sensors will activate the ProxSensor, because there ain't a knife without a hand, except you have ghosts at home or build a robot solely to cut this potoato, at which point I might question your sanity at either possibility.
   digitalWrite(proxPow, LOW);
   //the ProxSensor will return a value of either 0 (metal detected) or 1023 (no metal)
   pinMode(proxSig, INPUT);
