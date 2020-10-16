@@ -22,11 +22,8 @@ sense the incoming metal/knife and the potato will suddenly scream.
 #define pir2Sig 8          // = Passive Infrared Sensor 2 Signal Pin
 #define pir2GND 9          // = Passive Infrared Sensor 2 Grounding Pin
 
-#define proxPow 10          // = Inductive Proximity Sensor Power Pin (usually brown cable, while blue is for grounding, which)
+#define proxPow 10         // = Inductive Proximity Sensor Power Pin (usually brown cable, while blue is for grounding, which can be done on a free GND pin on the board)
 #define proxSig A0         // = Inductive Proximity Sensor Signal Pin (usually black cable)
-
-#define xtraGND 11         // we need an extra ground to ground the speaker
-#define xtraGND2 10        // we need an extra ground, if we use an Arduino Nano
 
 Talkie voice;
 
@@ -38,6 +35,9 @@ const uint8_t spRETURN[] PROGMEM ={0x00,0x60,0x12,0x15,0xC9,0x27,0x9C,0xF1,0xA8,
 
 
 void setup() {
+
+  pinMode(spkGND, OUTPUT);
+  digitalWrite(spkGND, LOW);
   
   // OUTPUT = gives power to the component at that pin; INPUT = takes an incoming signal from the component at that pin
   //we want our low-power PIR sensors to be running at all times
@@ -47,18 +47,17 @@ void setup() {
   digitalWrite(pir2Pow, HIGH);
   pinMode(pir1Sig, INPUT);
   pinMode(pir2Sig, INPUT);
+  pinMode(pir1GND, OUTPUT);
+  pinMode(pir2GND, OUTPUT);
+  digitalWrite(pir1GND, LOW);
+  digitalWrite(pir2GND, LOW);
   
   pinMode(proxPow, OUTPUT);
-  //we start the ProxSensor on LOW and only activate it when it might be needed, because it usually takes in a voltage between 6V and 36V, which mean if we constantly run it on HIGH, it will drink our battery like a cup of CocaCola at McDonalds.
-  //the PIR sensors will activate the ProxSensor, because there ain't a knife without a hand, except you have ghosts at home or build a robot solely to cut this potoato, at which point I might question your sanity at either possibility.
+  //we start the ProxSensor on LOW and only activate it when it might be needed, because it usually takes in a voltage between 6V and 36V, which mean if we constantly run it on HIGH, it will drink our battery like a cup of CocaCola at McDonalds
+  //the PIR sensors will activate the ProxSensor, because there ain't a knife without a hand, except you have ghosts at home or build a robot solely to cut this potoato, at which point I might question your sanity at either possibility
   digitalWrite(proxPow, LOW);
   //the ProxSensor will return a value of either 0 (metal detected) or 1023 (no metal)
   pinMode(proxSig, INPUT);
-
-  pinMode(xtraGND, OUTPUT);
-  digitalWrite(xtraGND, LOW);
-  pinMode(xtraGND2, OUTPUT);
-  digitalWrite(xtraGND2, LOW);
   
   Serial.begin(9600);
   
@@ -67,14 +66,15 @@ void setup() {
 void loop() {
 
   if(digitalRead(pir1Sig) == HIGH || digitalRead(pir2Sig) == HIGH){
-    digitalRead(pir1Sig) == HIGH ? Serial.println("Left PIR Detected STH") : Serial.println("Right PIR Detected STH");
     voice.say(spSTOP);
-//    voice.say(spPLEASE);
-//    voice.say(spRETURN);
+    delay(500);
+    voice.say(spPLEASE);
+    delay(500);
+    voice.say(spRETURN);
     delay(1000);
+    
     digitalWrite(proxPow, HIGH);
     if(analogRead(proxSig) == 0){
-      Serial.println("Metal detected");
       for(int i = 1; i <= 5; i++){
         voice.say(spNO);
         delay(1000);
